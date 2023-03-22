@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 @RestController
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
+//    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/user")
     User newUser(@RequestBody User newUser) {
         return userRepository.save(newUser);
@@ -29,6 +29,7 @@ public class UserController {
         return userRepository.findById(id);
     }
 
+//    @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/user/{id}")
     Optional<User> updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userRepository.findById(id)
@@ -41,6 +42,7 @@ public class UserController {
                 });
     }
 
+//    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/user/{id}")
     String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
