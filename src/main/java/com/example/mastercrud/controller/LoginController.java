@@ -31,7 +31,7 @@ public class LoginController {
             token.setToken(UUID.randomUUID().toString());
             token.setUserId(user.getId());
             tokenRepository.save(token);
-            return ResponseEntity.ok(new LoginResponse("Bearer " + token.getToken()));
+            return ResponseEntity.ok(new LoginResponse(user.getName()));
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
