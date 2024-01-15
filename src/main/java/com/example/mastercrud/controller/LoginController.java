@@ -1,0 +1,36 @@
+package com.example.mastercrud.controller;
+
+import com.example.mastercrud.classes.Token;
+import com.example.mastercrud.model.LoginRequest;
+import com.example.mastercrud.model.User;
+import com.example.mastercrud.repository.TokenRepository;
+import com.example.mastercrud.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+@RestController
+public class LoginController {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest request) {
+        User user = userRepository.findByUsername(request.getUsername());
+
+        if (user != null && user.getPassword().equals(request.getPassword())) {
+            Token token = new Token();
+            token.setToken(UUID.randomUUID().toString());
+            token.setUserId(user.getId());
+            tokenRepository.save(token);
+            return token.getToken();
+        }
+
+        return null;
+    }
+}
