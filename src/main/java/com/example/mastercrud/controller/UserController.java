@@ -13,7 +13,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-//    @CrossOrigin(origins = "http://localhost:4200")
+    /**
+     * Creates a new user.
+     *
+     * @param newUser The user object to be created.
+     * @return The created user.
+     */
     @PostMapping("/user")
     User newUser(@RequestBody User newUser) {
         return userRepository.save(newUser);
@@ -29,7 +34,13 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-//    @CrossOrigin(origins = "http://localhost:4200")
+    /**
+     * Updates user information by ID.
+     *
+     * @param newUser The updated user information.
+     * @param id      The ID of the user to be updated.
+     * @return An optional containing the updated user if found, otherwise empty.
+     */
     @PutMapping("/user/{id}")
     Optional<User> updateUser(@RequestBody User newUser, @PathVariable Long id) {
         return userRepository.findById(id)
@@ -37,12 +48,12 @@ public class UserController {
                     user.setUsername(newUser.getUsername());
                     user.setName(newUser.getName());
                     user.setEmail(newUser.getEmail());
+                    user.setPassword(newUser.getPassword());
 
                     return userRepository.save(user);
                 });
     }
 
-//    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/user/{id}")
     String deleteUser(@PathVariable Long id) {
         userRepository.deleteById(id);
