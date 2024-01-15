@@ -2,10 +2,13 @@ package com.example.mastercrud.controller;
 
 import com.example.mastercrud.classes.Token;
 import com.example.mastercrud.model.LoginRequest;
+import com.example.mastercrud.model.LoginResponse;
 import com.example.mastercrud.model.User;
 import com.example.mastercrud.repository.TokenRepository;
 import com.example.mastercrud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +23,7 @@ public class LoginController {
     private TokenRepository tokenRepository;
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
 
         if (user != null && user.getPassword().equals(request.getPassword())) {
@@ -28,9 +31,9 @@ public class LoginController {
             token.setToken(UUID.randomUUID().toString());
             token.setUserId(user.getId());
             tokenRepository.save(token);
-            return token.getToken();
+            return ResponseEntity.ok(new LoginResponse("Bearer " + token.getToken()));
         }
 
-        return null;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
